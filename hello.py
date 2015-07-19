@@ -1,6 +1,8 @@
 from flask import Flask
 import os
 import unirest
+from flask import request
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -8,7 +10,7 @@ def hello_world():
     return 'Hello World!'
 
 @app.route('/url', method="POST")
-def request():
+def requestw():
   url = request.args.get('url')
   response = unirest.post("https://camfind.p.mashape.com/image_requests",
   headers={
