@@ -1,7 +1,31 @@
 from flask import Flask
 import os
+import unirest
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
+
+@app.route('/url/<url>')
+def request(url):
+  response = unirest.post("https://camfind.p.mashape.com/image_requests",
+  headers={
+    "X-Mashape-Key": "ysmAp4zJQcmshhUqiSlmhotB226Bp1fclLOjsnidCdRFmzIRI9",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Accept": "application/json"
+  },
+  params={
+    "image_request[locale]": "en_US",
+    "image_request[remote_image_url]": "http://upload.wikimedia.org/wikipedia/en/2/2d/Mashape_logo.png"
+  } )
+  token = response['token']
+  response2 = unirest.get("https://camfind.p.mashape.com/image_responses/{token}",
+  headers={
+    "X-Mashape-Key": "ysmAp4zJQcmshhUqiSlmhotB226Bp1fclLOjsnidCdRFmzIRI9",
+    "Accept": "application/json"
+  })
+
+  if response2['status'] is "completed":
+    return response2['name']
+  return 'none'
