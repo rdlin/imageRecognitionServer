@@ -1,7 +1,7 @@
 from flask import Flask
 import os
 import unirest
-from flask import request
+from flask import request, jsonify
 
 app = Flask(__name__)
 
@@ -30,5 +30,5 @@ def requestw():
   })
 
   if response2['status'] is "completed":
-    return response2['name']
-  return 'none'
+      return jsonify(response = response2['name'])
+  return jsonify(response = 'none')
