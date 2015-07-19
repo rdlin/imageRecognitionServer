@@ -7,8 +7,9 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello World!'
 
-@app.route('/url/<url>')
-def request(url):
+@app.route('/url', method="POST")
+def request():
+  url = request.args.get('url')
   response = unirest.post("https://camfind.p.mashape.com/image_requests",
   headers={
     "X-Mashape-Key": "ysmAp4zJQcmshhUqiSlmhotB226Bp1fclLOjsnidCdRFmzIRI9",
@@ -17,7 +18,7 @@ def request(url):
   },
   params={
     "image_request[locale]": "en_US",
-    "image_request[remote_image_url]": "http://upload.wikimedia.org/wikipedia/en/2/2d/Mashape_logo.png"
+    "image_request[remote_image_url]": url
   } )
   token = response['token']
   response2 = unirest.get("https://camfind.p.mashape.com/image_responses/{token}",
